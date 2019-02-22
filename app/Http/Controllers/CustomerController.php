@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\City;
 use App\Customer;
+use App\Http\Requests\CustomerRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -29,29 +30,22 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param CustomerRequest $request
      * @return Response
      */
-    public function store(Request $request){
+    public function store(CustomerRequest $request){
         $customer = new Customer();
         $customer->name     = $request->input('name');
         $customer->email    = $request->input('email');
         $customer->dob      = $request->input('dob');
         $customer->city_id  = $request->input('city_id');
-
         $customer->save();
 
-        //dung session de dua ra thong bao
         Session::flash('success', 'Tạo mới khách hàng thành công');
-        //tao moi xong quay ve trang danh sach khach hang
         return redirect()->route('customers.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+
     public function edit($id){
         $customer = Customer::findOrFail($id);
         $cities = City::all();
